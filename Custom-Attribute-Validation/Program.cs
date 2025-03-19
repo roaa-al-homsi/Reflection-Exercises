@@ -2,6 +2,7 @@
 
 namespace Custom_Attribute_Validation
 {
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     class RangeAttribute : Attribute
     {
         public int Min { get; set; }
@@ -29,6 +30,7 @@ namespace Custom_Attribute_Validation
         public static bool ValidationPerson(Person person)
         {
             Type type = typeof(Person);
+            bool isValid = true;
 
             foreach (var property in type.GetProperties())
             {
@@ -41,15 +43,15 @@ namespace Custom_Attribute_Validation
                     if (value < rangeAttribute.Min || value > rangeAttribute.Max)
                     {
                         Console.WriteLine($"Validation failed for property {property.Name} : {rangeAttribute.ErrorMessage}");
-                        return false;
+                        isValid = false;
                     }
                 }
             }
-            return true;
+            return isValid;
         }
         static void Main(string[] args)
         {
-            Person person = new Person() { Age = 100, Name = "Roaa Homsi", Experience = 10 };
+            Person person = new Person() { Age = 10, Name = "Roaa Homsi", Experience = 1 };
             if (ValidationPerson(person))
             {
                 Console.WriteLine("Person is valid..");
